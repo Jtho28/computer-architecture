@@ -8,20 +8,21 @@ int increaseCount(int output[], int num);
 void printResult(int output[], int cnt);
 
 //global variables
-int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-int output[] = {0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0, 0, 0};
-int count = 0;
+int arr[] = {10, 2, 1, 1, 10, 10, 6};
+int count = sizeof(arr)/sizeof(arr[0]);
+int output[50] = {0};
+int outputsize = sizeof(output)/sizeof(output[0]);
+
 
 //main function
 int main()
 {
-	count = sizeof(arr)/sizeof(arr[0]);
 	
 	if (countNumbers(arr, count) == 0)
 	{
 		return 0;
 	}
-	printResult(output, count);
+	printResult(output, outputsize);
 	return 0;
 }
 
@@ -32,15 +33,16 @@ int main()
 //calls increaseCount in loop
 int countNumbers(int input[], int cnt)
 {
-	int i = 0;
-	while(i <= cnt)
+	int i;
+	int num = -1;
+	for(i = 0; i <= cnt - 1; i++)
 	{
-		if (increaseCount(output, input[i]) == 0)
+		num = input[i];
+		if (increaseCount(output, num) == 0)
 		{
-			printf("ERROR: Number outside of range\n");
+			printf("Error: invalid number %d\n", num);
 			return 0;
 		}
-		i++;
 	}
 	
 	return 1;
@@ -54,11 +56,9 @@ int increaseCount(int output[], int num)
 	{
 		return 0;
 	}
-	else
-	{
-		output[num] += 1;
-		return 1;
-	}
+	output[num] += 1;
+	return 1;
+
 }
 	
 //print the result output array
@@ -66,9 +66,13 @@ int increaseCount(int output[], int num)
 void printResult(int output[], int cnt)
 {
 	int i;
-	for (i = 0; i < cnt - 1; i++)
+	printf("Result:\n");
+	for (i = 0; i < cnt; i++)
 	{
-		printf("%d : %d\n", arr[i], output[i]);
+		if (output[i] > 0)
+		{
+			printf("%d : %d\n", i, output[i]);
+		}
 	}
 }
 

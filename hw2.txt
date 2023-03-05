@@ -1,0 +1,115 @@
+Please show and explain your work to get full credit.
+Please do not try to copy answers from Internet or your classmate.
+
+Due: 2/27 (Mon) 11:59pm 
+
+1. (10 points) Encode the following instructions in Hexadecimal. Show your work.
+srl	$t0, $s0, 4		
+sub	$t0, $t1, $s1
+
+
+2. (10 points) Decode the following encoded instructions. Show your work.
+0x29010064 
+0x21290011
+
+
+3. (30 points) Translate the following C code to MIPS assembly code. Try to use a minimum number of instructions. 
+Register allocations
+- i 		$s0
+- j 		$s1
+- base of A[]	$s2
+- base of B[] 	$s3
+
+3.1. (10 points)
+	if (i == j) 
+		j += 1; 
+	else 
+		i--; 
+	j += i;
+
+3.2. (10 points)
+	A[j] = B[i+1] + B[1];
+
+3.3. (10 points)
+	i = 0;
+
+	while (j != A[i]) {
+		i += 2;
+	}
+
+
+4. (35 points) Assume the following C code. 
+int main () {
+        ....
+        int arr[10]; 
+        test (arr, 10, 5);
+        
+        ....
+}
+
+int test (int *arr, int size, int number) {
+        return lookup (arr, size, number);
+}
+
+int lookup (int * arr, int size, int number) {                
+        int i=0;
+
+        for(i=0;i<size;i++) {
+                if(arr[i] == number) {
+                        return i;
+                }
+        }
+
+        return -1;
+}
+
+Complete assembly code for main(), test(), and lookup() functions. Try to use a minimum number of instructions. Note, you will need to use stacks to complete the function call. Please make sure that which registers' values need to be stored in the stack.
+
+Register allocations
+- arguments (arr, size, and number):    $a0, $a1, and $a2
+- arr                            $s0
+- return value                   $v0
+- stack pointer                  $sp
+
+main:
+            ....                        
+        
+        /* write your instructions here */
+
+        jal        test                
+
+
+        ....
+
+        /* assume your program is done here */
+
+test:
+        /* write your instructions here */
+
+        jal        lookup                
+
+        /* write your instructions here */
+
+lookup: 
+        /* write your instructions here */
+
+
+5. (15 points) Consider the following MIPS loop:
+        addi     $s0, $zero, 10
+LOOP:
+        ble      $s0, $zero, DONE
+        addi     $s0, $s0, -1
+        sll      $t0, $s0, 2
+        add      $t0, $t0, $s1
+        lw       $t1, 0 ($t0)
+        addi     $t1, $t1, 2
+        sw       $t1, 0 ($t0)
+        j        LOOP
+DONE:
+
+Register allocations
+- i              $s0
+- base of A[]    $s1
+- temporaries    $t0 ~ t1
+
+Translate above assembly code to C code. Please note that this is a loop. 

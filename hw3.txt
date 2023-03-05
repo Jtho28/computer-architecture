@@ -1,0 +1,59 @@
+Please show and explain your work to get full credit.
+Please do not try to copy answers from the Internet, your classmates, and materials from previous semesters. 
+I will be very harsh for cheating.
+
+Due: 3/10 (Fri) 11:59pm 
+
+1. (20 points) What is a linker? Explain how it works and show the benefits of it.
+
+2. (20 points) What is a relocatable object and what information does it have (in terms of ELF)? How about an executable object? What are differences between two objects, relocatable and executable (in terms of ELF)?
+
+3. (20 points) List benefits of static and dynamic libraries. (at least two per each)
+
+4. (20 points) Consider the following swap.c code. List symbol types (local, global, or external global) and their sections (.text, .data, or .bss). 
+
+<swap.c>
+int buf[2] = {1, 2};
+external int value;
+static int *bufp0 = &buf[0];
+int *bufp1;
+
+static void decrease () {
+	static int cnt = 0;
+	int i=cnt;
+	i++;
+	cnt++;
+
+	decr(cnt);
+}
+
+void swap () {
+	int value;
+	int *p = &buf[1];
+	
+	decrease();
+	bufp1 = p;
+	value = *bufp0;
+	*bufp0 = *bufp1;
+	*bufp1 = value;
+}
+
+5. (20 points) Consider the following two source files. 
+
+<a.c>
+int a = 15;
+int b;
+int c;
+int main () {}
+int func () {}
+
+<b.c>
+double a;
+double b;
+int c;
+int func = 2;
+int test () {}
+
+5.1 (12 points) What is the problem when a linker tries to create an executable file with the two object files (a.o and b.o) generated from a.c and b.c. How can you fix it?
+
+5.2 (8 points) Let's assume that the problem in 5.1 has been fixed and the linker generates an executable file (a.out). What is a potential problem if you execute a.out?

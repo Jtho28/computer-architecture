@@ -1,0 +1,26 @@
+HW1 - due: 2/10 (Fri) 11:59pm
+
+Please show and explain your work. Please be brief.
+You have to answer all the questions to get full credits.
+Please do not copy answers from the Internet, your classmate, and previous class materials.
+I will be very harsh for cheating.
+
+1. (10 points) What are the main characteristics of RISC processors?
+
+
+2. Consider the three processors (P1, P2, and P3) below. Assume that each processor has a single core and same microarchitecture, e.g., pipelines, super-scalar, and hyperthreading.
+
+P1: supporting "ISA A" - Clock: 2.3 GHz, CPI: 2.1
+P2: supporting "ISA B" - Clock: 1.4 GHz, CPI: 1.1
+P3: supporting "ISA C" - Clock: 5.2 GHz, CPI: 4.3
+
+2.1. (15 points) You were asked to write a program using an assembly language for P1. Can the program run on P2 and P3? Explain your answer.
+
+2.2. (15 points) You were asked to write programs using C and Java. Explain how each program written in C and Java can be executed on these processors.
+
+2.3. (20 points) You were asked to compare performance among these processors. Which processor can execute the most number of instructions per second? Show all of your work.
+
+2.4. (20 points) Assume that you implemented a program written in standard C. Will the processor you found in the question 2.3 provide the better performance, i.e., reduced execution time, than other processors for the program? Explain your answer.
+
+
+3. (20 points) Describe the reasons (or your thoughts) why and how learning (knowing) computer architecture can be helpful for software developers.

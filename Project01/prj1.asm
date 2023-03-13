@@ -5,9 +5,13 @@
 # All memory structures are placed after the
 # .data assembler directive
 .data
-input:		.word 50, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 # change these values (and size) to test your program
+input:		.word 48, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 # change these values (and size) to test your program
 output:		.word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # This will store the count for each number (The size of this output must be 50 regardless of input's size)
-error:		.asciiz "Error: invalid number"		#define error string	
+error:		.asciiz "Error: invalid number"		#define error string
+newline:	.asciiz "\n"
+result:		.asciiz "Result:\n"
+colon:		.asciiz " : "
+
 
 # Declare main as a global function
 .globl main 
@@ -61,7 +65,7 @@ countNumbers :
 		sll $t0, $s0, 2 #multiply i by 4 and store in temp reg
 		add $t0, $t0, $a0 #add i to base address for input array
 		
-		sw $a2,  0($t0) #store value of input[i] into the the parameter register as num
+		lw $a2, 0($t0) #store value of input[i] into the the parameter register as num
 		
 		
 		
@@ -109,13 +113,51 @@ increaseCnt:
 	
 	
 	false_range:
+		li $v0, 4
+		la $a0, error
+		syscall
+		
 		li $v0, 10
 		syscall
-		jr $ra
 
 # printResult function starts here
 printResult:
 	#Write your code here	
-
-	#You must use the jr instruction for return 
-	jr $ra
+	addi $s5, $zero, 0	#define i and set to zero
+	
+	li $v0, 4
+	la $a0, result
+	syscall
+	
+	loop2:
+		bge $s5, 50, gomain
+		sll $s6, $s5, 2		#i * 4
+		add $s7, $a3, $t1	#output[i]
+		lw $t5, 0($s7)		# load value of output[i]
+		
+		beq $t5, $zero, loop2
+		
+		li $v0, 1
+		la $a0, ($s5)
+		syscall
+		
+		li $v0, 4
+		la $a0, colon
+		syscall
+		
+		li $v0, 1
+		la $a0, ($s7)
+		syscall
+		
+		li $v0, 4
+		la $a0, newline
+		syscall
+		
+		addi $s5, $s5, 1	# increment i
+		
+		j loop2
+		
+	
+	gomain:
+		jr $ra
+	

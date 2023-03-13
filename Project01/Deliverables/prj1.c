@@ -8,7 +8,7 @@ int increaseCount(int output[], int num);
 void printResult(int output[], int cnt);
 
 //global variables
-int arr[] = {10, 2, 1, 1, 10, 10, 6, 40, 40, 40, 49, 50};
+int arr[] = {10, 2, 1, 1, 10, 10, 6, 40, 40, 40, 49};
 int count = sizeof(arr)/sizeof(arr[0]);
 int output[50] = {0};
 int outputsize = sizeof(output)/sizeof(output[0]);

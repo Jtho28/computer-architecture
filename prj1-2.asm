@@ -34,7 +34,7 @@ main:
 	#Print result 
 	jal printResult
 	
-	li $v0, 10
+	li $v0, 10	# exit
 	syscall
 	
 	
@@ -57,19 +57,20 @@ countNumbers:
 	
 	#loop structure
 	loop:
-		bge $s0, $a1, end_loop
+		bge $s0, $a1, end_loop		#exit the loop if i is >= cnt
 		sll $t0, $s0, 2
 		add $t0, $t0, $a0
 		
-		lw $a3, 0($t0)
+		lw $a3, 0($t0)			#set num parameter
 		
-		jal increaseCnt
+		jal increaseCnt			# jump to increaseCnt function
 		
 		addi $s0, $s0, 1
 		
 		j loop
 		
 	end_loop:
+		# recover stack
 		lw $ra, 0($sp)
 		lw $a1, 4($sp)
 		lw $s0, 8($sp)
@@ -78,7 +79,6 @@ countNumbers:
 		addi $sp, $sp, 20
 		
 		
-		li $v0, 1
 		jr $ra
 		
 		
@@ -126,7 +126,7 @@ printResult:
 		lw $t1, 0($t0)
 		
 		addi $s2, $s2, 1	# i++
-		addi $s3, $s2, -1	# i - 1
+		addi $s3, $s2, -1	# i - 1 so that we can still print out the proper i value
 		
 		beq $t1, $zero, loop2
 		

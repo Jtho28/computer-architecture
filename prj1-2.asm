@@ -5,26 +5,26 @@
 # All memory structures are placed after the
 # .data assembler directive
 .data
-input:		.word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 # change these values (and size) to test your program
+input:		.word 1, 1, 1, 2, 0, 4# change these values (and size) to test your program
 output:		.word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # This will store the count for each number (The size of this output must be 50 regardless of input's size)
-error:		.asciiz "Error: invalid number"		#define error string
+error:		.asciiz "Error: invalid number: "		#define error string
 newline:	.asciiz "\n"
 result:		.asciiz "Result:\n"
 colon:		.asciiz " : "
-
 
 # Declare main as a global function
 .globl main 
 
 # All program code is placed after the
 # .text assembler directive
-.text 		
+.text
 
 # The label 'main' represents the starting point
 main:
 	la $a0, input	# $a0 based address of input array
-	li $a1, 12	# $a1 how many numbers are in the array
+	li $a1, 6	# $a1 how many numbers are in the array
 	la $a2, output 	# load base address of output
+	li $a3, 0	# num
 
 	jal countNumbers
 
@@ -33,22 +33,18 @@ main:
 	
 	#Print result 
 	jal printResult
-
-
-
-
-
-# countNumbers function starts here
-countNumbers :
-	#Write your code here
+	
+	li $v0, 10
+	syscall
+	
+	
+countNumbers:
 	
 	#define and initialize i
 	addi $s0, $zero, 0
 	
-	#store count - 1
 	subi $s1, $a1, 1
 	
-	#set return value to 1 initially
 	addi $v0, $zero, 1
 	
 	#create stack and store return address, count, i, count-1, and return value
@@ -61,25 +57,19 @@ countNumbers :
 	
 	#loop structure
 	loop:
-		bgt $s0, 12, end_loop
-		sll $t0, $s0, 2 #multiply i by 4 and store in temp reg
-		add $t0, $t0, $a0 #add i to base address for input array
+		bge $s0, $a1, end_loop
+		sll $t0, $s0, 2
+		add $t0, $t0, $a0
 		
-		lw $a3, 0($t0) #store value of input[i] into the the parameter register as num
+		lw $a3, 0($t0)
 		
-		
-		
-		#You must use the jal instruction for function call
-		jal increaseCnt	
-		
-			
+		jal increaseCnt
 		
 		addi $s0, $s0, 1
 		
 		j loop
-	
+		
 	end_loop:
-	
 		lw $ra, 0($sp)
 		lw $a1, 4($sp)
 		lw $s0, 8($sp)
@@ -89,60 +79,59 @@ countNumbers :
 		
 		
 		li $v0, 1
-		jr $ra	
-	
-	
-
-
-	#You must use the jr instruction for return 
-	jr $ra
-
-# increaseCnt function starts here
+		jr $ra
+		
+		
 increaseCnt:
-	
-	move $t4, $a3		# move num into
-	
-	#Write your code here	
-	blt $t4, $zero, false_range
-	bgt $t4, 49, false_range
-	sll $t0, $t4, 2		# num * 4 for offset
-	add $s2, $a3, $t0	# output[num]
-	lw $t2, 0($s2)		# load value at output[num] address
-	addi $t2, $t2, 1
-	sw $t2, 0($s2)
-
-	
-	li $v0, 1
-	jr $ra
-	
-	
+		
+		addi $t0, $a3, 0
+		
+		blt $t0, 0, false_range
+		bgt $t0, 49, false_range
+		sll $t0, $t0, 2		#num * 4
+		add $t1, $t0, $a2	#output[num]
+		lw $t2, 0($t1)		#pull value at output[num] from address
+		addi $t2, $t2, 1	#add 1 to value
+		sw $t2, 0($t1)
+		
+		jr $ra
+		
 	false_range:
 		li $v0, 4
 		la $a0, error
 		syscall
 		
-		li $v0, 10
+		li $v0, 1
+		la $a0, ($t0)
 		syscall
-
-# printResult function starts here
+		
+		li $v0, 10
+		syscall			#exit
+		
 printResult:
-	#Write your code here	
-	addi $s5, $zero, 0	#define i and set to zero
+	#li $v0, 1
+	#move $a0, $a3
+	#syscall
+	
+	addi $s2, $zero, 0
 	
 	li $v0, 4
 	la $a0, result
 	syscall
 	
 	loop2:
-		bge $s5, 50, gomain
-		sll $s6, $s5, 2		#i * 4
-		add $s7, $a3, $t1	#output[i]
-		lw $t5, 0($s7)		# load value of output[i]
+		bge $s2, 50, gomain
+		sll $t0, $s2, 2		# i * 4
+		add $t0, $t0, $a2	# output[i]
+		lw $t1, 0($t0)
 		
-		beq $t5, $zero, loop2
+		addi $s2, $s2, 1	# i++
+		addi $s3, $s2, -1	# i - 1
+		
+		beq $t1, $zero, loop2
 		
 		li $v0, 1
-		la $a0, ($s5)
+		la $a0, ($s3)
 		syscall
 		
 		li $v0, 4
@@ -150,18 +139,15 @@ printResult:
 		syscall
 		
 		li $v0, 1
-		la $a0, ($t5)
+		la $a0, ($t1)
 		syscall
 		
 		li $v0, 4
 		la $a0, newline
 		syscall
 		
-		addi $s5, $s5, 1	# increment i
-		
 		j loop2
 		
-	
 	gomain:
 		jr $ra
-	
+

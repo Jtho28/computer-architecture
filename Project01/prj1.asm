@@ -5,7 +5,7 @@
 # All memory structures are placed after the
 # .data assembler directive
 .data
-input:		.word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 # change these values (and size) to test your program
+input:		.word 50, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 # change these values (and size) to test your program
 output:		.word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # This will store the count for each number (The size of this output must be 50 regardless of input's size)
 error:		.asciiz "Error: invalid number"		#define error string	
 
@@ -109,7 +109,8 @@ increaseCnt:
 	
 	
 	false_range:
-		li $v0, 0
+		li $v0, 10
+		syscall
 		jr $ra
 
 # printResult function starts here

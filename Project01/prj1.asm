@@ -7,7 +7,7 @@
 .data
 input:		.word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 # change these values (and size) to test your program
 output:		.word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # This will store the count for each number (The size of this output must be 50 regardless of input's size)
-
+error:		.asciiz "Error: invalid number"		#define error string	
 
 # Declare main as a global function
 .globl main 
@@ -57,15 +57,25 @@ countNumbers :
 	
 	#loop structure
 	loop:
-		bgt $s0, $s1, end_loop
+		bgt $s0, 12, end_loop
 		sll $t0, $s0, 2 #multiply i by 4 and store in temp reg
 		add $t0, $t0, $a0 #add i to base address for input array
 		
-		sw $a2,  0($t0) #store value of input[i] into the the parameter register
+		sw $a2,  0($t0) #store value of input[i] into the the parameter register as num
+		
+		
 		
 		#You must use the jal instruction for function call
 		jal increaseCnt	
 		
+			
+		
+		addi $s0, $s0, 1
+		
+		j loop
+	
+	end_loop:
+	
 		lw $ra, 0($sp)
 		lw $a1, 4($sp)
 		lw $s0, 8($sp)
@@ -73,11 +83,8 @@ countNumbers :
 		lw $v0, 16($sp)
 		addi $sp, $sp, 20
 		
-		j loop
-	
-	end_loop:
+		
 		li $v0, 1
-		syscall
 		jr $ra	
 	
 	
